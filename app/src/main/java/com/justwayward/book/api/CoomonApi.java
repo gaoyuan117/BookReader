@@ -1,6 +1,8 @@
 package com.justwayward.book.api;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,6 +28,7 @@ import com.justwayward.book.ui.activity.MyVipActivity;
 import com.justwayward.book.ui.activity.login.LoginActivity;
 import com.justwayward.book.ui.fragment.BookCityFragment;
 import com.justwayward.book.utils.ScreenUtils;
+import com.justwayward.book.utils.ToastUtils;
 import com.mob.MobSDK;
 
 import cn.sharesdk.framework.PlatformActionListener;
@@ -86,7 +89,7 @@ public class CoomonApi {
                     }).setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            context.startActivity(new Intent(context, LoginActivity.class).putExtra("type","login"));
+                            context.startActivity(new Intent(context, LoginActivity.class).putExtra("type", "login"));
                         }
                     }).create();
         }
@@ -156,7 +159,7 @@ public class CoomonApi {
         }
         oks.setTitle(context.getString(R.string.app_name));
         oks.setText("我正在这里阅读小说，大家一起来啊！");
-        oks.setImageUrl(AppConfig.BaseUrl+"logo.png");
+        oks.setImageUrl(AppConfig.BaseUrl + "logo.png");
 
         oks.setUrl(ReaderApplication.shareUrl);
         oks.setSiteUrl(ReaderApplication.shareUrl);
@@ -220,25 +223,33 @@ public class CoomonApi {
     }
 
     //打开浏览器
-    public static void toBrowser(Context context,String url){
+    public static void toBrowser(Context context, String url) {
+        try {
+
+
+        if (TextUtils.isEmpty(url)) return;
         Intent intent = new Intent();
         intent.setAction("android.intent.action.VIEW");
         Uri content_url = Uri.parse(url);
         intent.setData(content_url);
         context.startActivity(intent);
+        }catch (Exception e){
+
+        }
     }
 
     /**
      * 计算出来的位置，y方向就在anchorView的上面和下面对齐显示，x方向就是与屏幕右边对齐显示
      * 如果anchorView的位置有变化，就可以适当自己额外加入偏移来修正
+     *
      * @param anchorView  呼出window的view
-     * @param contentView   window的内容布局
-     * @return window显示的左上角的xOff,yOff坐标
+     * @param contentView window的内容布局
+     * @return window显示的左上角的xOff, yOff坐标
      */
     public static int[] calculatePopWindowPos(final View anchorView, final View contentView) {
         final int windowPos[] = new int[2];
         final int anchorLoc[] = new int[2];
-     // 获取锚点View在屏幕上的左上角坐标位置
+        // 获取锚点View在屏幕上的左上角坐标位置
         anchorView.getLocationOnScreen(anchorLoc);
         final int anchorHeight = anchorView.getHeight();
         // 获取屏幕的高宽
@@ -258,6 +269,15 @@ public class CoomonApi {
             windowPos[1] = anchorLoc[1] + anchorHeight;
         }
         return windowPos;
+    }
+
+    public static void copy(Activity activity, String s) {
+        // 从API11开始android推荐使用android.content.ClipboardManager
+        // 为了兼容低版本我们这里使用旧版的android.text.ClipboardManager，虽然提示deprecated，但不影响使用。
+        ClipboardManager cm = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
+        // 将文本内容放到系统剪贴板里。
+        cm.setText(s);
+        ToastUtils.showToast("复制成功");
     }
 
 

@@ -419,7 +419,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
-                android:text="猜你喜欢"
+                android:text="你可能喜欢"
                 android:textColor="@color/common_h1"
                 android:textSize="15sp"
                 android:visibility="gone" />

@@ -128,6 +128,7 @@ import butterknife.Bind;
 import butterknife.OnClick;
 import cn.sharesdk.framework.Platform;
 import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.sina.weibo.SinaWeibo;
 import cn.sharesdk.tencent.qq.QQ;
 import cn.sharesdk.tencent.qzone.QZone;
 import cn.sharesdk.wechat.friends.Wechat;
@@ -266,6 +267,7 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View,
     private String source, source_url;
     private PopupWindow morePopWindow;
     private AdView adView;
+    private PopupWindow sharePopWindow2;
 
     //添加收藏需要，所以跳转的时候传递整个实体类
     public static void startActivity(Context context, String title, String novelId, boolean isShelf, String pic, String author, String des) {
@@ -1579,10 +1581,30 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View,
             case R.id.ll_live_shar_pyq://朋友圈
                 CoomonApi.share(this, WechatMoments.NAME, this);
                 break;
+            case R.id.ll_live_share_qq:
+                CoomonApi.share(this, QQ.NAME, this);
+                break;
+            case R.id.ll_live_share_qqzone:
+                CoomonApi.share(this, QZone.NAME, this);
+                break;
+            case R.id.ll_live_share_wechat:
+                CoomonApi.share(this, Wechat.NAME, this);
+                break;
+            case R.id.ll_live_share_sinna:
+                CoomonApi.share(this, SinaWeibo.NAME, this);
+                break;
+            case R.id.ll_live_share_pyq://朋友圈
+                CoomonApi.share(this, WechatMoments.NAME, this);
+                break;
+            case R.id.tv_share_copy://复制
+                CoomonApi.copy(this,ReaderApplication.shareUrl);
+                sharePopWindow2.dismiss();
+                break;
             case R.id.tvBookShare://分享
                 morePopWindow.dismiss();
-                gone(rlReadAaSet, rlReadMark);
-                CoomonApi.share(this, "", this);
+                hideReadBar();
+                showSharePopWindow2();
+//                CoomonApi.share(this, "", this);
                 break;
             case R.id.tvBookDetail://小说详情
                 morePopWindow.dismiss();
@@ -1739,6 +1761,26 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View,
         sharePopWindow.setFocusable(false);
         sharePopWindow.setOutsideTouchable(false);
         sharePopWindow.showAtLocation(mRlBookReadRoot, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+    }
+
+
+    /**
+     * 右上角的分享
+     */
+    public void showSharePopWindow2() {
+        View view = LayoutInflater.from(ReadActivity.this).inflate(R.layout.pop_share, null);
+        view.findViewById(R.id.ll_live_share_qqzone).setOnClickListener(this);
+        view.findViewById(R.id.ll_live_share_qq).setOnClickListener(this);
+        view.findViewById(R.id.ll_live_share_pyq).setOnClickListener(this);
+        view.findViewById(R.id.ll_live_share_wechat).setOnClickListener(this);
+        view.findViewById(R.id.ll_live_share_sinna).setOnClickListener(this);
+        view.findViewById(R.id.tv_share_copy).setOnClickListener(this);
+        sharePopWindow2 = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        sharePopWindow2.setBackgroundDrawable(new BitmapDrawable());
+        sharePopWindow2.setFocusable(false);
+        sharePopWindow2.setOutsideTouchable(true);
+        sharePopWindow2.showAtLocation(mRlBookReadRoot, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
     }
 
     @Override

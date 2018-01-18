@@ -51,12 +51,16 @@ public class BookShelfAdapter extends BaseQuickAdapter<BookShelfBean.DataBean, B
         } else {
             tvAd.setVisibility(View.GONE);
             helper.setText(R.id.tvRecommendTitle, item.getTitle())
-                    .setText(R.id.tvLatelyUpdate, FormatUtils.getDescriptionTimeFromDateString(item.getUpdate_time() + "000"))
+                    .setText(R.id.tvLatelyUpdate, FormatUtils.getDescriptionTimeFromDateString(item.getRead_time() + "000"))
                     .setText(R.id.tvRecommendShort, "：" + item.getChapter_info().getChapter());
 
-//                        .setVisible(R.id.ckBoxSelect, item.showCheckBox)
-//                        .setVisible(R.id.ivUnReadDot, FormatUtils.formatZhuiShuDateString(item.updated)
-//                                .compareTo(item.recentReadingTime) > 0);
+            ImageView tvUpdate = helper.getView(R.id.ivUnReadDot);
+
+            if (item.getIs_update()==0){
+                tvUpdate.setVisibility(View.GONE);
+            }else {
+                tvUpdate.setVisibility(View.VISIBLE);
+            }
 
             //图片
             ImageView mIvBookCover = helper.getView(R.id.ivRecommendCover);

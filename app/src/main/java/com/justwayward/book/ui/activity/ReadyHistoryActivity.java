@@ -26,13 +26,14 @@ import com.justwayward.book.retrofit.RxUtils;
 import com.justwayward.book.ui.adapter.ReadyHistoryAdapter;
 import com.justwayward.book.view.recyclerview.decoration.DividerDecoration;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
 
-public class ReadyHistoryActivity extends BaseActivity implements BaseQuickAdapter.OnItemChildClickListener {
+public class ReadyHistoryActivity extends BaseActivity implements BaseQuickAdapter.OnItemChildClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     @Bind(R.id.img_back)
     ImageView imgBack;
@@ -45,7 +46,7 @@ public class ReadyHistoryActivity extends BaseActivity implements BaseQuickAdapt
 
     private ReadyHistoryAdapter mAdapter;
     private HistoryBeanDao historyBeanDao;
-    private List<HistoryBean> list;
+    private List<HistoryBean> mList = new ArrayList<>();
     private boolean isOpen = true;
 
     @Override
@@ -55,18 +56,32 @@ public class ReadyHistoryActivity extends BaseActivity implements BaseQuickAdapt
 
     @Override
     protected void setupActivityComponent(AppComponent appComponent) {
+        View view = View.inflate(this, R.layout.empty_common, null);
+        TextView textView = (TextView) view.findViewById(R.id.tv_empty_content);
+        textView.setText("暂无最近阅读记录");
         historyBeanDao = ReaderApplication.getDaoInstant().getHistoryBeanDao();
-        list = this.historyBeanDao.queryBuilder().list();
 
-        if (list != null) {
+        mAdapter = new ReadyHistoryAdapter(R.layout.item_ready_history, mList);
+        recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerview.setAdapter(mAdapter);
+        DividerDecoration itemDecoration = new DividerDecoration(ContextCompat.getColor(getActivity(), R.color.common_divider_narrow), 1, 0, 0);
+        itemDecoration.setDrawLastItem(false);
+        recyclerview.addItemDecoration(itemDecoration);
+        mAdapter.setOnItemChildClickListener(this);
+        mAdapter.setEmptyView(view);
+
+        refreshLayout.setOnRefreshListener(this);
+        loadHistory();
+
+    }
+
+    private void loadHistory(){
+        mList.clear();
+        List<HistoryBean> list = this.historyBeanDao.queryBuilder().list();
+        if (list != null && list.size() > 0) {
             Collections.reverse(list);
-            mAdapter = new ReadyHistoryAdapter(R.layout.item_ready_history, list);
-            recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
-            DividerDecoration itemDecoration = new DividerDecoration(ContextCompat.getColor(getActivity(), R.color.common_divider_narrow), 1, 0, 0);
-            itemDecoration.setDrawLastItem(false);
-            recyclerview.addItemDecoration(itemDecoration);
-            recyclerview.setAdapter(mAdapter);
-            mAdapter.setOnItemChildClickListener(this);
+            mList.addAll(list);
+            mAdapter.notifyDataSetChanged();
         }
     }
 
@@ -91,7 +106,7 @@ public class ReadyHistoryActivity extends BaseActivity implements BaseQuickAdapt
                 finish();
                 break;
             case R.id.tv_clear:
-                if (list == null || list.isEmpty()) {
+                if (mList == null || mList.isEmpty()) {
                     return;
                 }
                 showClearDialog();
@@ -101,7 +116,7 @@ public class ReadyHistoryActivity extends BaseActivity implements BaseQuickAdapt
 
     @Override
     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-        HistoryBean bean = list.get(position);
+        HistoryBean bean = mList.get(position);
         if (isOpen) {//后台开启了会员模式
             if (ReaderApplication.isvip) {//用户是会员
                 ReadActivity.startActivity(this, bean.getTitle(), bean.getBookId(), bean.getIsShelf(), bean.getPic(), bean.getPic(), bean.getDes());
@@ -123,7 +138,8 @@ public class ReadyHistoryActivity extends BaseActivity implements BaseQuickAdapt
                     @Override
                     protected void onHandleSuccess(SwitchBean switchBean) {
                         isOpen = switchBean.isMember_switch();
-                    }});
+                    }
+                });
     }
 
     /**
@@ -137,14 +153,21 @@ public class ReadyHistoryActivity extends BaseActivity implements BaseQuickAdapt
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.dismiss();
-                    }})
+                    }
+                })
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         historyBeanDao.deleteAll();
-                        list.clear();
+                        mList.clear();
                         mAdapter.notifyDataSetChanged();
-                    }})
+                    }
+                })
                 .create().show();
+    }
+
+    @Override
+    public void onRefresh() {
+        loadHistory();
     }
 }

@@ -58,6 +58,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -238,7 +239,7 @@ public class BookDetailActivity extends BaseActivity implements BookDetailContra
         mTvCatgory.setText(String.format(getString(R.string.book_detail_category), data.getCategory_name()));
         mTvWordCount.setText(data.getWord_num());
         mTvLatelyUpdate.setText(FormatUtils.getDescriptionTimeFromDateString(data.getRead_time() + "000"));
-        mTvLatelyFollower.setText(String.valueOf(data.getView_num()));
+        mTvLatelyFollower.setText(String.valueOf(data.getCollect_num()));
         mTvRetentionRatio.setText(TextUtils.isEmpty(data.getCollect_num() + "") ?
                 "-" : String.format(getString(R.string.book_detail_retention_ratio),
                 percent + ""));
@@ -251,8 +252,11 @@ public class BookDetailActivity extends BaseActivity implements BookDetailContra
         if (!TextUtils.isEmpty(labels)) {
             String[] split = labels.split(",");
             for (int i = 0; i < split.length; i++) {
-                tagList.add(split[i]);
-                showHotWord();
+                if (!TextUtils.isEmpty(split[i])){
+                    tagList.add(split[i]);
+                    showHotWord();
+                }
+
             }
         }
         times = 0;

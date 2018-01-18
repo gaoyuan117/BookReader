@@ -19,6 +19,7 @@ import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
+import android.widget.TextView;
 
 import com.justwayward.book.R;
 import com.justwayward.book.utils.NetworkUtils;
@@ -66,6 +67,8 @@ public abstract class BaseRVActivity<T> extends BaseActivity implements OnLoadMo
             mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             mRecyclerView.setItemDecoration(ContextCompat.getColor(this, R.color.common_divider_narrow), 1, 0, 0);
             mRecyclerView.setAdapterWithProgress(mAdapter);
+
+
         }
     }
 

@@ -9,8 +9,11 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.justwayward.book.R;
+import com.justwayward.book.api.CoomonApi;
 import com.justwayward.book.bean.BookCityBean;
+import com.justwayward.book.manager.SettingManager;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import butterknife.Bind;
@@ -62,7 +65,14 @@ public class BookCityHomeItem2Adapter extends BaseAdapter {
         holder.tvAuthor.setText(listBean.getAuthor());
         holder.tvTitle.setText(listBean.getTitle());
         holder.tvContent.setText(listBean.getDesc());
-        holder.tvNum.setText(listBean.getWord_num()+"");
+        if (listBean.getWord_num()<10000){
+            holder.tvNum.setText(listBean.getWord_num()+"字");
+        }else {
+            BigDecimal old = new BigDecimal(listBean.getWord_num() * 0.0001 ).setScale(1, BigDecimal.ROUND_HALF_UP);
+
+            holder.tvNum.setText(old+"万字");
+        }
+
         holder.tvType.setText(listBean.getLabels());
         return view;
     }

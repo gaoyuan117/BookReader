@@ -17,6 +17,7 @@ package com.justwayward.book.ui.adapter;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.TextView;
 
 import com.justwayward.book.R;
 import com.justwayward.book.base.Constant;
@@ -28,6 +29,7 @@ import com.justwayward.book.utils.NoDoubleClickListener;
 import com.yuyh.easyadapter.recyclerview.EasyRVAdapter;
 import com.yuyh.easyadapter.recyclerview.EasyRVHolder;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -50,10 +52,18 @@ public class RecommendBookListAdapter extends EasyRVAdapter<BookDetailBean.Recom
             holder.setRoundImageUrl(R.id.ivBookListCover,item.getPic(), R.drawable.cover_default);
         }
 
+        TextView tvNum = holder.getView(R.id.tvWordCount);
+        if (item.getWord_num()<10000){
+            tvNum.setText(item.getWord_num()+"字");
+        }else {
+            BigDecimal old = new BigDecimal(item.getWord_num() * 0.0001 ).setScale(1, BigDecimal.ROUND_HALF_UP);
+
+            tvNum.setText(old+"万字");
+        }
+
         holder.setText(R.id.tvBookListTitle, item.getTitle())
                 .setText(R.id.tvBookListAuthor, item.getAuthor()+" | ")
                 .setText(R.id.tvCatgory, item.getCategory_name()+" | ")
-                .setText(R.id.tvWordCount, item.getWord_num()+"")
                 .setText(R.id.time, FormatUtils.getDescriptionTimeFromDateString(item.getAdd_time()+"000"));
 
         holder.setOnItemViewClickListener(new NoDoubleClickListener() {

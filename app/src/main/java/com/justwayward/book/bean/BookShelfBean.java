@@ -107,11 +107,20 @@ public class BookShelfBean implements Serializable {
         private int read_time;
         private int add_time;
         private int ad_position;
+        private int is_update;
         private String title;
         private String pic;
         private String author;
         private String desc;
         private String type;
+
+        public int getIs_update() {
+            return is_update;
+        }
+
+        public void setIs_update(int is_update) {
+            this.is_update = is_update;
+        }
 
         private ChapterInfoBean chapter_info;
 

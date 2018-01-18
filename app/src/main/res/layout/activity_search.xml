@@ -10,6 +10,15 @@
 
     <include layout="@layout/common_toolbar" />
 
+    <TextView
+        android:visibility="gone"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:text="暂无阅读记录"
+        android:id="@+id/tv_empty_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <RelativeLayout
         android:id="@+id/layoutHotWord2"
         android:layout_width="match_parent"
@@ -110,7 +119,7 @@
     <com.justwayward.book.view.recyclerview.EasyRecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:visibility="gone"
         app:layout_empty="@layout/common_empty_view"
         app:layout_progress="@layout/common_progress_view"

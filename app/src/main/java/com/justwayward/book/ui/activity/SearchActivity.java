@@ -81,6 +81,8 @@ public class SearchActivity extends BaseRVActivity<SearchBean.DataBean> implemen
     RelativeLayout rlHistory;
     @Bind(R.id.tvClear)
     TextView tvClear;
+    @Bind(R.id.tv_empty_content)
+    TextView tvEmptyContent;
     @Bind(R.id.lvSearchHistory)
     ListView lvSearchHistory;
 
@@ -134,6 +136,7 @@ public class SearchActivity extends BaseRVActivity<SearchBean.DataBean> implemen
         lvSearchHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                searchMenuItem.expandActionView();
                 search(mHisList.get(position));
             }
         });
@@ -296,6 +299,7 @@ public class SearchActivity extends BaseRVActivity<SearchBean.DataBean> implemen
         searchMenuItem.expandActionView();
         searchView = (SearchView) MenuItemCompat.getActionView(searchMenuItem);
         searchView.setQueryHint("输入书名或作者名");
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
@@ -329,6 +333,7 @@ public class SearchActivity extends BaseRVActivity<SearchBean.DataBean> implemen
 
                     @Override
                     public boolean onMenuItemActionCollapse(MenuItem item) {
+                        gone(tvEmptyContent);
                         initTagGroup();
                         return true;
                     }
@@ -399,7 +404,7 @@ public class SearchActivity extends BaseRVActivity<SearchBean.DataBean> implemen
     }
 
     private void initSearchResult() {
-        gone(mTagGroup, mTagGroup2, mLayoutHotWord, mLayoutHotWord, rlHistory);
+        gone(mTagGroup, mTagGroup2, mLayoutHotWord, mLayoutHotWord, rlHistory,mLayoutHotWord2);
         visible(mRecyclerView);
         if (mListPopupWindow.isShowing())
             mListPopupWindow.dismiss();
@@ -501,9 +506,11 @@ public class SearchActivity extends BaseRVActivity<SearchBean.DataBean> implemen
                     protected void onHandleSuccess(SearchBean searchBean) {
                         mAdapter.clear();
                         if (searchBean.getData() == null || searchBean.getData().size() == 0) {
+                            tvEmptyContent.setVisibility(View.VISIBLE);
                             mAdapter.notifyDataSetChanged();
                             return;
                         }
+                        tvEmptyContent.setVisibility(View.GONE);
                         mAdapter.addAll(searchBean.getData());
                         mAdapter.notifyDataSetChanged();
                         initSearchResult();
