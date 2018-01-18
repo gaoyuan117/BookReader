@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/common_toolbar" />
+
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+    <com.justwayward.book.view.AlphaTabsIndicator
+        android:id="@+id/alphaIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:background="#e4e5e6"
+        android:orientation="horizontal">
+
+        <com.justwayward.book.view.AlphaTabView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="5dp"
+            app:paddingTexwithIcon="4dp"
+            app:tabIconNormal="@mipmap/shujia_false"
+            app:tabIconSelected="@mipmap/shujia_true"
+            app:tabText="书架"
+            app:tabTextSize="13sp"
+            app:textColorNormal="#464646"
+            app:textColorSelected="@color/global" />
+
+        <com.justwayward.book.view.AlphaTabView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="6dp"
+            app:paddingTexwithIcon="4dp"
+            app:tabIconNormal="@mipmap/shucheng_false"
+            app:tabIconSelected="@mipmap/shucheng_true"
+            app:tabText="书城"
+            app:tabTextSize="13sp"
+            app:textColorNormal="#464646"
+            app:textColorSelected="@color/global" />
+
+        <com.justwayward.book.view.AlphaTabView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="5dp"
+            app:paddingTexwithIcon="4dp"
+            app:tabIconNormal="@mipmap/faxian_false"
+            app:tabIconSelected="@mipmap/faxian_true"
+            app:tabText="发现"
+            app:tabTextSize="13sp"
+            app:textColorNormal="#464646"
+            app:textColorSelected="@color/global" />
+
+        <com.justwayward.book.view.AlphaTabView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="5dp"
+            app:paddingTexwithIcon="4dp"
+            app:tabIconNormal="@mipmap/wode_false"
+            app:tabIconSelected="@mipmap/wode_true"
+            app:tabText="我的"
+            app:tabTextSize="13sp"
+            app:textColorNormal="#464646"
+            app:textColorSelected="@color/global" />
+
+
+    </com.justwayward.book.view.AlphaTabsIndicator>
+
+
+</LinearLayout>

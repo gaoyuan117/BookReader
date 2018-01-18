@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/img_cover"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginRight="10dp"
+        android:src="@mipmap/zhifubao2" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/img_cover"
+        android:ellipsize="end"
+        android:lines="1"
+        android:text="充值20元"
+        android:textColor="@color/black"
+        android:textSize="15sp" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/img_cover"
+        android:layout_toRightOf="@+id/img_cover"
+        android:orientation="horizontal">
+
+        <TextView
+            android:textSize="11sp"
+            android:id="@+id/tv_time2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="2017-12-11 12:12:12"
+            android:textColor="@color/light_gray" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_recharge_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:paddingBottom="4dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="4dp"
+        android:text="充值成功"
+        android:textColor="#686868" />
+
+
+</RelativeLayout>

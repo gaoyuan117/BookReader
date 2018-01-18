@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/common_bg"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <com.justwayward.book.view.ReboundScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layerType="software">
+
+        <com.justwayward.book.view.CustomExpandableListView
+            android:id="@+id/elvMale"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:childDivider="@drawable/shape_common_dash_divide"
+            android:groupIndicator="@null"
+            android:listSelector="@drawable/shape_common_selector" />
+    </com.justwayward.book.view.ReboundScrollView>
+
+</LinearLayout>

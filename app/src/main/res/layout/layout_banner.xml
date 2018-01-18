@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.youth.banner.Banner
+        android:layout_below="@id/navigation_bar"
+        android:id="@+id/banner"
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        app:indicator_height="8dp"
+        app:indicator_margin="6dp"
+        app:image_scale_type="center_crop"
+        app:indicator_width="8dp" />
+
+</LinearLayout>

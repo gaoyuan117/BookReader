@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@null"
+    android:orientation="vertical"
+    android:padding="5dp">
+
+    <LinearLayout
+        android:id="@+id/ll_assets"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@drawable/selector_gv"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tv_money"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100元"
+            android:textColor="@drawable/select_text_color" />
+
+        <TextView
+            android:id="@+id/tv_jindou"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="100金豆"
+            android:textColor="@drawable/select_text_color" />
+
+        <TextView
+            android:id="@+id/tv_add_jindou"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="+20金豆"
+            android:textColor="@drawable/select_text_color" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_other"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@drawable/selector_gv"
+        android:gravity="center"
+        android:text="其他金额"
+        android:textSize="18sp"
+        android:visibility="gone" />
+
+
+    <LinearLayout
+        android:id="@+id/ll_input"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:background="@drawable/selector_gv"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <EditText
+                android:maxLength="5"
+                android:inputType="number"
+                android:textColorHint="@color/global"
+                android:gravity="end"
+                android:layout_weight="1"
+                android:id="@+id/et_input"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:textColor="@color/global"/>
+
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="元"
+                android:textColor="@color/global" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_input_jindou"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="0金豆"
+            android:textColor="@color/global" />
+
+        <TextView
+            android:id="@+id/tv_input_add_jindou"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="+0金豆"
+            android:textColor="@color/global" />
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.justwayward.book.ui.activity.Top2Fragment">
+
+
+    <com.justwayward.book.view.ReboundScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layerType="software">
+
+
+        <com.justwayward.book.view.CustomExpandableListView
+            android:id="@+id/elvMale"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:childDivider="@drawable/shape_common_dash_divide"
+            android:groupIndicator="@null"
+            android:listSelector="@drawable/shape_common_selector" />
+
+
+    </com.justwayward.book.view.ReboundScrollView>
+
+    <TextView
+        android:id="@+id/tv_hot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@mipmap/zuire"
+        android:drawablePadding="12dp"
+        android:gravity="center_vertical"
+        android:padding="12dp"
+        android:text="最热榜"
+        android:visibility="gone" />
+
+    <include layout="@layout/layout_line" />
+
+    <TextView
+        android:id="@+id/tv_save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@mipmap/liucun"
+        android:drawablePadding="12dp"
+        android:gravity="center_vertical"
+        android:padding="12dp"
+        android:text="留存榜"
+        android:visibility="gone" />
+
+    <include layout="@layout/layout_line" />
+
+
+    <TextView
+        android:id="@+id/tv_collect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@mipmap/shoucang"
+        android:drawablePadding="12dp"
+        android:gravity="center_vertical"
+        android:padding="12dp"
+        android:text="收藏榜"
+        android:visibility="gone" />
+
+    <include layout="@layout/layout_line" />
+
+    <TextView
+        android:id="@+id/tv_word"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@mipmap/zishu"
+        android:drawablePadding="12dp"
+        android:gravity="center_vertical"
+        android:padding="12dp"
+        android:text="字数榜"
+        android:visibility="gone" />
+
+    <include layout="@layout/layout_line" />
+
+
+</LinearLayout>
