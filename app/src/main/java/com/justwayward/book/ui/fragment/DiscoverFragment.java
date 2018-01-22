@@ -23,6 +23,7 @@ import com.justwayward.book.retrofit.HttpResult;
 import com.justwayward.book.retrofit.RetrofitClient;
 import com.justwayward.book.retrofit.RxUtils;
 import com.justwayward.book.ui.DiscoverOtherActivity;
+import com.justwayward.book.ui.activity.MyYuanActivity;
 import com.justwayward.book.ui.activity.SearchActivity;
 import com.justwayward.book.ui.activity.TopActivity;
 import com.justwayward.book.ui.adapter.DiscoverAdapter;
@@ -108,8 +109,10 @@ public class DiscoverFragment extends BaseFragment implements BaseQuickAdapter.O
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
         if (position == 0) {
             startActivity(new Intent(getActivity(), TopActivity.class));
+        } else if (position == 1) {
+            startActivity(new Intent(getActivity(), MyYuanActivity.class));
         } else {
-            CoomonApi.toBrowser(getActivity(),mList.get(position).getZone_link());
+            CoomonApi.toBrowser(getActivity(), mList.get(position).getZone_link());
         }
     }
 
@@ -117,11 +120,11 @@ public class DiscoverFragment extends BaseFragment implements BaseQuickAdapter.O
     private void addItem() {
         DiscoverBean bean = new DiscoverBean();
         bean.setZone_name("排行榜");
-//        DiscoverBean bean1 = new DiscoverBean();
-//        bean1.setZone_name("会员专区");
+        DiscoverBean bean1 = new DiscoverBean();
+        bean1.setZone_name("我的源");
 
         mList.add(bean);
-//        mList.add(bean1);
+        mList.add(bean1);
     }
 
     /**
@@ -188,6 +191,6 @@ public class DiscoverFragment extends BaseFragment implements BaseQuickAdapter.O
 
     @Override
     public void OnBannerClick(int position) {
-        CoomonApi.toBrowser(getActivity(),bannerBeens.get(position - 1).getUrl());
+        CoomonApi.toBrowser(getActivity(), bannerBeens.get(position - 1).getUrl());
     }
 }

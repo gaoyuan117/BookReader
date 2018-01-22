@@ -690,7 +690,6 @@ public class ACache {
             return file;
         }
 
-
         private File newFile(String key) {
             return new File(cacheDir, key.hashCode() + "");
         }
@@ -915,7 +914,6 @@ public class ACache {
             drawable.draw(canvas);
             return bitmap;
         }
-
 
         /*
          * Bitmap → Drawable

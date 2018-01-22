@@ -75,6 +75,8 @@ public abstract class BaseReadView extends View {
     }
 
 
+
+
     public synchronized void init(int theme) {
         if (!isPrepared) {
             try {
@@ -103,6 +105,18 @@ public abstract class BaseReadView extends View {
     protected long et = 0;
     protected boolean cancel = false;
     protected boolean center = false;
+
+    public synchronized void setTextType(String path) {
+        resetTouchPoint();
+
+        if (isPrepared) {
+            pagefactory.setTextType(getContext(),path);
+            pagefactory.onDraw(mCurrentPageCanvas);
+            pagefactory.onDraw(mNextPageCanvas);
+            postInvalidate();
+        }
+    }
+
 
     private boolean isNextPage(boolean isnext) {
         BookStatus status;

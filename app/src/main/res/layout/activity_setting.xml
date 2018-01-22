@@ -59,6 +59,31 @@
                 android:background="@color/common_divider_narrow" />
 
             <RelativeLayout
+                android:id="@+id/bookshelfNotify"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/touch_bg"
+                android:clickable="true"
+                android:padding="@dimen/activity_vertical_margin">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_centerVertical="true"
+                    android:text="阅读休息提醒"
+                    android:textColor="@color/common_h1" />
+
+                <ImageView
+                    android:id="@+id/img_notify"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/notify_close" />
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:id="@+id/updateNotification"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -86,13 +111,13 @@
                 android:visibility="gone" />
 
             <RelativeLayout
-                android:visibility="gone"
                 android:id="@+id/provincialTraffic"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/view_line_2"
                 android:background="@drawable/touch_bg"
-                android:padding="@dimen/activity_vertical_margin">
+                android:padding="@dimen/activity_vertical_margin"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -121,13 +146,13 @@
                 android:visibility="gone" />
 
             <RelativeLayout
-                android:visibility="gone"
                 android:id="@+id/rlFlipStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/view_line_6"
                 android:background="@drawable/touch_bg"
-                android:padding="@dimen/activity_vertical_margin">
+                android:padding="@dimen/activity_vertical_margin"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -213,12 +238,12 @@
                 android:id="@+id/feedBack"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/aboutUs"
                 android:background="@drawable/touch_bg"
                 android:clickable="true"
-                android:padding="@dimen/activity_vertical_margin"
-                android:layout_below="@+id/aboutUs"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true">
+                android:padding="@dimen/activity_vertical_margin">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -240,12 +265,12 @@
                 android:id="@+id/changePwd"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/aboutUs"
                 android:background="@drawable/touch_bg"
                 android:clickable="true"
-                android:padding="@dimen/activity_vertical_margin"
-                android:layout_below="@+id/aboutUs"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true">
+                android:padding="@dimen/activity_vertical_margin">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -308,7 +333,6 @@
     </com.justwayward.book.view.ReboundScrollView>
 
     <TextView
-        android:visibility="gone"
         android:id="@+id/tvBottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -317,5 +341,6 @@
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:text="© 2016 JustWayward All Rights Reserved"
         android:textColor="@color/common_h3"
-        android:textSize="@dimen/book_read_bottom_text" />
+        android:textSize="@dimen/book_read_bottom_text"
+        android:visibility="gone" />
 </RelativeLayout>

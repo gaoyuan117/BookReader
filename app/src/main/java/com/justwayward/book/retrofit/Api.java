@@ -14,10 +14,12 @@ import com.justwayward.book.bean.CoinRateBean;
 import com.justwayward.book.bean.CommonBean;
 import com.justwayward.book.bean.DiscoverBean;
 import com.justwayward.book.bean.FeedBackBean;
+import com.justwayward.book.bean.FontListBean;
 import com.justwayward.book.bean.FreeBean;
 import com.justwayward.book.bean.HotSearchBean;
 import com.justwayward.book.bean.LoginBean;
 import com.justwayward.book.bean.MonthPackageBean;
+import com.justwayward.book.bean.MyYuanListBean;
 import com.justwayward.book.bean.PayBean;
 import com.justwayward.book.bean.RechargeListBean;
 import com.justwayward.book.bean.RechargeMoneyBean;
@@ -325,4 +327,36 @@ public interface Api {
     @FormUrlEncoded
     @POST("/api/novel/getSiteList")
     Observable<HttpResult<List<SiteListBean>>> getSiteList(@Field("token") String type);
+
+
+    //添加小说
+    @FormUrlEncoded
+    @POST("/api/source/addNovel")
+    Observable<HttpResult<CommonBean>> addBook(@Field("token") String token, @Field("novel") String novel);
+
+    //获取小说列表
+    @FormUrlEncoded
+    @POST("/api/source/getNovelList")
+    Observable<HttpResult<List<MyYuanListBean>>> getNovelList(@Field("token") String token);
+
+    //删除小说
+    @FormUrlEncoded
+    @POST("/api/source/delNovel")
+    Observable<HttpResult<CommonBean>> delNovel(@Field("token") String token,@Field("novel_id") String novel_id);
+
+    //删除源
+    @FormUrlEncoded
+    @POST("/api/source/delSource")
+    Observable<HttpResult<CommonBean>> delSource(@Field("token") String token,@Field("id") String novel_id);
+
+    //添加我的源
+    @FormUrlEncoded
+    @POST("/api/source/addSource")
+    Observable<HttpResult<CommonBean>> addSource(@Field("token") String token, @Field("novel_id") String novel_id, @Field("url") String url);
+
+
+    //获取站点列表
+    @FormUrlEncoded
+    @POST("/api/public/getFontList")
+    Observable<HttpResult<List<FontListBean>>> getFontList(@Field("token") String type);
 }

@@ -49,11 +49,15 @@ public class Constant {
 
     public static String PATH_CHM = PATH_DATA + "/chm";
 
+    public static String PATH_FONT = PATH_DATA + "/font/";
+
     public static String BASE_PATH = AppUtils.getAppContext().getCacheDir().getPath();
 
     public static final String ISNIGHT = "isNight";
 
     public static final String ISBYUPDATESORT = "isByUpdateSort";
+    public static final String ISOPENNOTIFY = "isOpenNotify";
+    public static final String NOTIFYPOSITION = "NotifyPosition";
     public static final String FLIP_STYLE = "flipStyle";
 
     public static final String SUFFIX_TXT = ".txt";

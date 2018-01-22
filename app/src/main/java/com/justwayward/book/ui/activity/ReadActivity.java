@@ -209,6 +209,10 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View,
     TextView tv_source;
     @Bind(R.id.tvMore)
     TextView tvMore;
+    @Bind(R.id.tv_auto_light)
+    TextView tvAutoLight;
+    @Bind(R.id.tvFontSize)
+    TextView tvFontSize;
 
     private View decodeView;
     private SharedPreferences sp;
@@ -268,6 +272,8 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View,
     private PopupWindow morePopWindow;
     private AdView adView;
     private PopupWindow sharePopWindow2;
+    private int notify;
+    private Disposable notifyDisposable;
 
     //添加收藏需要，所以跳转的时候传递整个实体类
     public static void startActivity(Context context, String title, String novelId, boolean isShelf, String pic, String author, String des) {
@@ -308,6 +314,10 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View,
 
     @Override
     public void initDatas() {
+        //阅读休息提醒
+        notify = SharedPreferencesUtil.getInstance().getInt(Constant.NOTIFYPOSITION);
+        notifytTime();
+
         sp = getSharedPreferences("tts", MODE_PRIVATE);
 
         if (ReaderApplication.days > 0) {
@@ -472,6 +482,7 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View,
         int fontSizePx = SettingManager.getInstance().getReadFontSize();
         int progress = (int) ((ScreenUtils.pxToDpInt(fontSizePx) - 12) / 1.7f);
         seekbarFontSize.setProgress(progress);
+        tvFontSize.setText((int) ScreenUtils.pxToSp(ScreenUtils.dpToPxInt(12 + 1.7f * progress)) + "");
         seekbarFontSize.setOnSeekBarChangeListener(new SeekBarChangeListener());
 
         seekbarLightness.setMax(100);
@@ -488,8 +499,12 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View,
             stopAutoLightness();
         }
 
+
         cbVolume.setChecked(SettingManager.getInstance().isVolumeFlipEnable());
         cbVolume.setOnCheckedChangeListener(new ChechBoxChangeListener());
+
+        isAutoLight(SettingManager.getInstance().isAutoBrightness());
+
 
         cbAutoBrightness.setChecked(SettingManager.getInstance().isAutoBrightness());
         cbAutoBrightness.setOnCheckedChangeListener(new ChechBoxChangeListener());
@@ -773,6 +788,11 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View,
         BookSourceActivity.start(this, bookId, mChapterList.get(currentChapter).getChapter(), 1);
     }
 
+    @OnClick(R.id.tv_auto_light)
+    public void autoLight() {
+        isAutoLight(!SettingManager.getInstance().isAutoBrightness());
+    }
+
     /***************Bottom Bar*****************/
 
     @OnClick(R.id.tvBookReadMode)
@@ -818,14 +838,16 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View,
 
     @OnClick(R.id.tvBookReadSettings)
     public void setting() {
-        if (isVisible(mLlBookReadBottom)) {
-            if (isVisible(rlReadAaSet)) {
-                gone(rlReadAaSet);
-            } else {
-                visible(rlReadAaSet);
-                gone(rlReadMark);
-            }
-        }
+        gone(mLlBookReadBottom);
+        visible(rlReadAaSet);
+//        if (isVisible(mLlBookReadBottom)) {
+//            if (isVisible(rlReadAaSet)) {
+//                gone(rlReadAaSet);
+//            } else {
+//                visible(rlReadAaSet);
+//                gone(rlReadMark);
+//            }
+//        }
     }
 
     @OnClick(R.id.tvBookReadDownload)
@@ -871,6 +893,13 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View,
         }
     }
 
+    @OnClick(R.id.tv_font_type)
+    public void setFontType() {
+        Intent intent = new Intent(this, FontListActivity.class);
+        startActivityForResult(intent, 123);
+//        mPageWidget.setTextType("");
+    }
+
     @OnClick(R.id.tvBookReadToc)
     public void onClickToc() {
         gone(rlReadAaSet, rlReadMark);
@@ -890,20 +919,20 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View,
 
     @OnClick(R.id.ivBrightnessMinus)
     public void brightnessMinus() {
-        int curBrightness = SettingManager.getInstance().getReadBrightness();
-        if (curBrightness > 5 && !SettingManager.getInstance().isAutoBrightness()) {
-            seekbarLightness.setProgress((curBrightness = curBrightness - 2));
-            ScreenUtils.saveScreenBrightnessInt255(curBrightness, ReadActivity.this);
-        }
+//        int curBrightness = SettingManager.getInstance().getReadBrightness();
+//        if (curBrightness > 5 && !SettingManager.getInstance().isAutoBrightness()) {
+//            seekbarLightness.setProgress((curBrightness = curBrightness - 2));
+//            ScreenUtils.saveScreenBrightnessInt255(curBrightness, ReadActivity.this);
+//        }
     }
 
     @OnClick(R.id.ivBrightnessPlus)
     public void brightnessPlus() {
-        int curBrightness = SettingManager.getInstance().getReadBrightness();
-        if (!SettingManager.getInstance().isAutoBrightness()) {
-            seekbarLightness.setProgress((curBrightness = curBrightness + 2));
-            ScreenUtils.saveScreenBrightnessInt255(curBrightness, ReadActivity.this);
-        }
+//        int curBrightness = SettingManager.getInstance().getReadBrightness();
+//        if (!SettingManager.getInstance().isAutoBrightness()) {
+//            seekbarLightness.setProgress((curBrightness = curBrightness + 2));
+//            ScreenUtils.saveScreenBrightnessInt255(curBrightness, ReadActivity.this);
+//        }
     }
 
     @OnClick(R.id.tvFontsizeMinus)
@@ -1039,6 +1068,12 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View,
                 LogUtils.e("源id：" + source);
                 mPresenter.getChapterRead(bookId, source);
                 break;
+            case 123:
+                LogUtils.e("字体选择");
+                if (mPageWidget != null) {
+                    mPageWidget.setTextType(getFontType());
+                }
+                break;
             default:
                 break;
         }
@@ -1107,6 +1142,18 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View,
             }
         }
         return super.onKeyUp(keyCode, event);
+    }
+
+    private void isAutoLight(boolean isAutoLightness) {
+
+        if (isAutoLightness) {
+            startAutoLightness();
+            tvAutoLight.setBackground(getResources().getDrawable(R.drawable.coner_orange_light));
+        } else {
+            stopAutoLightness();
+            ScreenUtils.saveScreenBrightnessInt255(ScreenUtils.getScreenBrightnessInt255(), AppUtils.getAppContext());
+            tvAutoLight.setBackground(getResources().getDrawable(R.drawable.shape_gray));
+        }
     }
 
     @Override
@@ -1323,6 +1370,7 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View,
         // progress range 1 - 10
         if (progress >= 0 && progress <= 10) {
             seekbarFontSize.setProgress(progress);
+            tvFontSize.setText((int) ScreenUtils.pxToSp(ScreenUtils.dpToPxInt(12 + 1.7f * progress)) + "");
             mPageWidget.setFontSize(ScreenUtils.dpToPxInt(12 + 1.7f * progress));
         }
     }
@@ -1597,7 +1645,7 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View,
                 CoomonApi.share(this, WechatMoments.NAME, this);
                 break;
             case R.id.tv_share_copy://复制
-                CoomonApi.copy(this,ReaderApplication.shareUrl);
+                CoomonApi.copy(this, ReaderApplication.shareUrl);
                 sharePopWindow2.dismiss();
                 break;
             case R.id.tvBookShare://分享
@@ -1704,10 +1752,92 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View,
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            showShareDialog();
+            if (msg.what == 1) {
+                showShareDialog();
+            } else if (msg.what == 2) {
+                notifyDialog(msg.arg1);
+            }
 
         }
     };
+
+    /**
+     * 阅读休息计时
+     */
+    private void notifytTime() {
+        int time = 0;
+        if (notify == 0) {
+            return;
+        } else if (notify == 1) {
+            LogUtils.e("阅读15分钟休息");
+            time = 15;
+        } else if (notify == 2) {
+            LogUtils.e("阅读30分钟休息");
+            time = 30;
+        } else if (notify == 3) {
+            LogUtils.e("阅读60分钟休息");
+            time = 60;
+        }
+
+        final int finalTime = time;
+        Observable.interval(1, TimeUnit.SECONDS)
+                .subscribe(new Observer<Long>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        notifyDisposable = d;
+                    }
+
+                    @Override
+                    public void onNext(Long value) {
+                        Log.e("gy", "value：" + value);
+                        if (value == finalTime * 60) {//阅读了一分钟了,该休息了
+                            notifyDisposable.dispose();
+                            Message message = new Message();
+                            message.what = 2;
+                            message.arg1 = finalTime;
+                            handler.sendMessage(message);
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        notifyDisposable.dispose();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    /**
+     * 阅读休息提示
+     */
+    private void notifyDialog(int arg1) {
+        shareDialog = new AlertDialog.Builder(this)
+                .setTitle("温馨提示")
+                .setMessage("亲 您已阅读" + arg1 + "分钟了哦!是否休息一下再看？")
+                .setCancelable(false)
+                .setPositiveButton("继续看", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        notifytTime();
+                    }
+                })
+                .setNegativeButton("休息一下", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        finish();
+                    }
+                })
+
+                .create();
+        shareDialog.show();
+    }
+
 
     /**
      * 显示分享提示对话框
@@ -1717,19 +1847,10 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View,
                 .setTitle("温馨提示")
                 .setMessage("亲 您已阅读一个小时了哦!好东西要分享，分享后可以继续阅读哦!")
                 .setCancelable(false)
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                        finish();
-                    }
-                })
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
                         showSharePopWindow();
-
                     }
                 })
                 .setOnKeyListener(new DialogInterface.OnKeyListener() {
@@ -1745,6 +1866,7 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View,
                 .create();
         shareDialog.show();
     }
+
 
     /**
      * 分享pop弹窗
@@ -1915,6 +2037,13 @@ public class ReadActivity extends BaseActivity implements BookReadContract.View,
         RelativeLayout.LayoutParams rllp = new RelativeLayout.LayoutParams(width, height);
         rllp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
         mRlBookReadRoot.addView(adView, rllp);
+    }
+
+
+    public String getFontType() { //搜索目录，扩展名，是否进入子文件夹
+        LogUtils.e("小说字体类型：" + SharedPreferencesUtil.getInstance().getString("font"));
+
+        return SharedPreferencesUtil.getInstance().getString("font");
     }
 
 }

@@ -74,6 +74,13 @@
         <item>按书籍名称排序</item>
     </string-array>
 
+    <string-array name="setting_dialog_notify_choice">
+        <item>关闭</item>
+        <item>阅读15分钟后</item>
+        <item>阅读30分钟后</item>
+        <item>阅读60分钟后</item>
+    </string-array>
+
     <string-array name="setting_dialog_style_choice">
         <item>模拟翻书效果</item>
         <item>滑动覆盖翻页效果</item>

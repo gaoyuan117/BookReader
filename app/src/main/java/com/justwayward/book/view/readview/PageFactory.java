@@ -21,6 +21,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.Log;
@@ -35,6 +36,7 @@ import com.justwayward.book.utils.AppUtils;
 import com.justwayward.book.utils.FileUtils;
 import com.justwayward.book.utils.LogUtils;
 import com.justwayward.book.utils.ScreenUtils;
+import com.justwayward.book.utils.SharedPreferencesUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -148,6 +150,23 @@ public class PageFactory {
         // Typeface typeface = Typeface.createFromAsset(context.getAssets(),"fonts/FZBYSK.TTF");
         // mPaint.setTypeface(typeface);
         // mNumPaint.setTypeface(typeface);
+
+        try {
+
+            String path = SharedPreferencesUtil.getInstance().getString("font");
+            Typeface typeface = null;
+            if (TextUtils.isEmpty(path)) {
+                typeface = Typeface.MONOSPACE;
+            } else {
+                typeface = Typeface.createFromFile(path);
+            }
+
+            mPaint.setTypeface(typeface);
+            mTitlePaint.setTypeface(typeface);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         this.bookId = bookId;
         this.chaptersList = chaptersList;
@@ -709,6 +728,21 @@ public class PageFactory {
         this.battery = battery;
         convertBetteryBitmap();
     }
+
+    public void setTextType(Context context, String path) {
+        Typeface typeface = null;
+        if (TextUtils.isEmpty(path)) {
+            typeface = Typeface.MONOSPACE;
+        } else {
+            typeface = Typeface.createFromFile(path);
+        }
+
+        mPaint.setTypeface(typeface);
+        mTitlePaint.setTypeface(typeface);
+        curEndPos = curBeginPos;
+        nextPage();
+    }
+
 
     public void setTime(String time) {
         this.time = time;

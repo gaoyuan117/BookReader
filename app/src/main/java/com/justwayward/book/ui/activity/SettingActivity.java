@@ -1,18 +1,3 @@
-/**
- * Copyright 2016 JustWayward Team
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.justwayward.book.ui.activity;
 
 
@@ -22,9 +7,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.widget.SwitchCompat;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.justwayward.book.Constants;
 import com.justwayward.book.R;
 import com.justwayward.book.ReaderApplication;
 import com.justwayward.book.base.BaseActivity;
@@ -41,6 +28,7 @@ import com.justwayward.book.retrofit.HttpResult;
 import com.justwayward.book.retrofit.RetrofitClient;
 import com.justwayward.book.retrofit.RxUtils;
 import com.justwayward.book.ui.activity.login.LoginActivity;
+import com.justwayward.book.utils.LogUtils;
 import com.justwayward.book.utils.SharedPreferencesUtil;
 import com.umeng.analytics.MobclickAgent;
 
@@ -64,6 +52,8 @@ public class SettingActivity extends BaseActivity {
     TextView mTvCacheSize;
     @Bind(R.id.noneCoverCompat)
     SwitchCompat noneCoverCompat;
+    @Bind(R.id.img_notify)
+    ImageView imgNotify;
 
     private String[] sort = {"update", "read", "name"};
 
@@ -110,6 +100,14 @@ public class SettingActivity extends BaseActivity {
 
         mTvFlipStyle.setText(getResources().getStringArray(R.array.setting_dialog_style_choice)[
                 SharedPreferencesUtil.getInstance().getInt(Constant.FLIP_STYLE, 0)]);
+
+        boolean aBoolean = SharedPreferencesUtil.getInstance().getBoolean(Constant.ISOPENNOTIFY);
+        if (aBoolean){
+            imgNotify.setImageDrawable(getDrawable(R.mipmap.notify_open));
+        }else {
+            imgNotify.setImageDrawable(getDrawable(R.mipmap.notify_close));
+        }
+
     }
 
 
@@ -126,10 +124,10 @@ public class SettingActivity extends BaseActivity {
 
     @OnClick({R.id.bookshelfSort})
     public void onClickBookShelfSort() {
-        new AlertDialog.Builder(mContext)
+        int a = SharedPreferencesUtil.getInstance().getInt(Constant.ISBYUPDATESORT, 0);
+        AlertDialog dialog = new AlertDialog.Builder(mContext)
                 .setTitle("书架排序方式")
-                .setSingleChoiceItems(getResources().getStringArray(R.array.setting_dialog_sort_choice),
-                        SharedPreferencesUtil.getInstance().getBoolean(Constant.ISBYUPDATESORT, true) ? 0 : 1,
+                .setSingleChoiceItems(getResources().getStringArray(R.array.setting_dialog_sort_choice), a,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -138,11 +136,47 @@ public class SettingActivity extends BaseActivity {
 
                                 setBookshelfSort(sort[which]);
 
-//                                SharedPreferencesUtil.getInstance().putBoolean(Constant.ISBYUPDATESORT, which == 0);
+                                SharedPreferencesUtil.getInstance().putInt(Constant.ISBYUPDATESORT, which);
                                 dialog.dismiss();
                             }
                         })
-                .create().show();
+                .create();
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+    }
+
+    @OnClick({R.id.bookshelfNotify})
+    public void onClickBookShelfNotify() {
+        int a = SharedPreferencesUtil.getInstance().getInt(Constant.NOTIFYPOSITION, 0);
+        AlertDialog dialog = new AlertDialog.Builder(mContext)
+                .setTitle("阅读休息提醒")
+                .setSingleChoiceItems(getResources().getStringArray(R.array.setting_dialog_notify_choice), a,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                SharedPreferencesUtil.getInstance().putInt(Constant.NOTIFYPOSITION, which);
+
+                                String type = getResources().getStringArray(R.array.setting_dialog_notify_choice)[which];
+                                LogUtils.e("阅读休息：" + type);
+                                if (type.equals("关闭")) {
+                                    SharedPreferencesUtil.getInstance().putBoolean(Constant.ISOPENNOTIFY, false);
+                                    imgNotify.setImageDrawable(getDrawable(R.mipmap.notify_close));
+                                } else {
+                                    SharedPreferencesUtil.getInstance().putBoolean(Constant.ISOPENNOTIFY, true);
+                                    imgNotify.setImageDrawable(getDrawable(R.mipmap.notify_open));
+                                }
+                                dialog.dismiss();
+                            }
+                        })
+                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .create();
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
     }
 
 
@@ -189,7 +223,7 @@ public class SettingActivity extends BaseActivity {
                             @Override
                             public void run() {
                                 // 清空书架
-                                if ( selected[1]) {
+                                if (selected[1]) {
                                     ReaderApplication.getDaoInstant().getBookShelfCacheDao().deleteAll();
                                     getList();
                                 }
